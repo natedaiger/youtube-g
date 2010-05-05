@@ -22,7 +22,19 @@ class YouTubeG
       def parse_entry(entry) 
         video_id = entry.elements["id"].text
         
-        if entry.elements["app:control/yt:state"]
+        if entry.elements["app:control/yt:state"]          
+          # yt:state generally indicates a video is unavailable
+          # see: http://code.google.com/apis/youtube/2.0/reference.html#youtube_data_api_tag_yt:state
+          unless entry.elements["app:control/yt:state[@name='restricted']"]
+            # the exception I've found is for *restricted* videos, which generally
+            # means they're not available for viewing on a device other than a web browser
+            # or in a certain region
+            return nil
+          end
+        end
+        
+        # if there's no content we're going to puke later
+        unless entry.elements['content']
           return nil
         end
         
