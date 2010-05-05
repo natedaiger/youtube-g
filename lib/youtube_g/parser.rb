@@ -21,6 +21,11 @@ class YouTubeG
     protected
       def parse_entry(entry) 
         video_id = entry.elements["id"].text
+        
+        if entry.elements["app:control/yt:state"]
+          return nil
+        end
+        
         published_at = Time.parse(entry.elements["published"].text)
         updated_at = Time.parse(entry.elements["updated"].text)
 
@@ -157,7 +162,9 @@ class YouTubeG
 
         videos = []
         feed.elements.each("entry") do |entry|
-          videos << parse_entry(entry)
+          if video = parse_entry(entry)
+            videos << video
+          end
         end
 
         YouTubeG::Response::VideoSearch.new(
