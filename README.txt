@@ -54,6 +54,11 @@ Standard feeds:
 Advanced queries (with boolean operators OR (either), AND (include), NOT (exclude)):
 	
   client.videos_by(:categories => { :either => [:news, :sports], :exclude => [:comedy] }, :tags => { :include => ['football'], :exclude => ['soccer'] })
+  
+Comment feeds for videos:
+  client.comments_for('some_youtube_id').comments
+  video = client.video_by('some_youtube_id')
+  video.comments_seach(:page => 2, :per_page => 12).comments
 
 == LOGGING
 

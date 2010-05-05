@@ -70,6 +70,21 @@ class YouTubeG
       parser = YouTubeG::Parser::VideoFeedParser.new(video_id)
       parser.parse
     end
+
+    # Retrieves a single YouTube video.
+    #
+    # === Parameters
+    #   vid<String>:: The ID of the video whose contents you'd like to retrieve
+    #
+    #   options<Hash> (optional)::  Accepts the options of :page (default is 1), 
+    #                               and :per_page (default is 25). :offset and :max_results
+    #                               can also be passed for a custom offset.
+    # === Returns
+    # YouTubeG::Response::CommentsSearch
+    def comments_for(vid, options={})
+      url = YouTubeG::Request::CommentsSearch.new(vid, options).url
+      YouTubeG::Parser::CommentsFeedParser.new(url).parse
+    end
     
     private
     

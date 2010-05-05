@@ -188,6 +188,60 @@ class YouTubeG
           :videos => videos)
       end
     end
+
+    class CommentsFeedParser < FeedParser
     
+      def parse_content(content)
+        doc = REXML::Document.new(content)
+        feed = doc.elements['feed']
+        
+        feed_id            = feed.elements["id"].text
+        updated_at         = Time.parse(feed.elements["updated"].text)
+        total_result_count = feed.elements["openSearch:totalResults"].text.to_i
+        offset             = feed.elements["openSearch:startIndex"].text.to_i
+        max_result_count   = feed.elements["openSearch:itemsPerPage"].text.to_i
+        
+        comments = []
+        feed.elements.each('entry') do |entry|
+          comments << parse_entry(entry)
+        end
+        YouTubeG::Response::CommentsSearch.new(
+          :feed_id            => feed_id,
+          :updated_at         => updated_at,
+          :total_result_count => total_result_count,
+          :offset             => offset,
+          :max_result_count   => max_result_count,
+          :comments           => comments)
+      end
+      
+    private
+      def parse_entry(entry)
+        comment_id = entry.elements["id"].text
+        
+        published_at = Time.parse(entry.elements["published"].text)
+        updated_at   = Time.parse(entry.elements["updated"].text)
+
+        title   = entry.elements["title"].text
+        content = entry.elements["content"].text
+
+        # parse the author
+        author_element = entry.elements["author"]
+        author = nil
+        if author_element
+          author = YouTubeG::Model::Author.new(
+                     :name => author_element.elements["name"].text,
+                     :uri => author_element.elements["uri"].text)
+        end
+      
+
+        comment = YouTubeG::Model::Comment.new(
+          :published_at => published_at,
+          :updated_at   => updated_at,
+          :title        => title,
+          :content      => content,
+          :author       => author)
+        return comment
+      end
+    end
   end 
 end

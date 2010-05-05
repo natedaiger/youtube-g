@@ -136,6 +136,16 @@ class YouTubeG
       def responses
         YouTubeG::Parser::VideosFeedParser.new("http://gdata.youtube.com/feeds/api/videos/#{unique_id}/responses").parse
       end
+
+      # Comments on the current video.
+      #
+      # === Returns
+      #   YouTubeG::Response::CommentsSearch
+      def comments_search(options={})
+        url = YouTubeG::Request::CommentsSearch.new(unique_id,options).url
+        YouTubeG::Parser::CommentsFeedParser.new(url).parse
+      end
+      
       
       # The ID of the video, useful for searching for the video again without having to store it anywhere. 
       # A regular query search, with this id will return the same video.
