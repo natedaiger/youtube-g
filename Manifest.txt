@@ -8,6 +8,7 @@ lib/youtube_g/chain_io.rb
 lib/youtube_g/client.rb
 lib/youtube_g/model/author.rb
 lib/youtube_g/model/category.rb
+lib/youtube_g/model/comment.rb
 lib/youtube_g/model/contact.rb
 lib/youtube_g/model/content.rb
 lib/youtube_g/model/playlist.rb
@@ -18,10 +19,12 @@ lib/youtube_g/model/video.rb
 lib/youtube_g/parser.rb
 lib/youtube_g/record.rb
 lib/youtube_g/request/base_search.rb
+lib/youtube_g/request/comments_search.rb
 lib/youtube_g/request/standard_search.rb
 lib/youtube_g/request/user_search.rb
 lib/youtube_g/request/video_search.rb
 lib/youtube_g/request/video_upload.rb
+lib/youtube_g/response/comments_search.rb
 lib/youtube_g/response/video_search.rb
 lib/youtube_g/version.rb
 test/helper.rb
